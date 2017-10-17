@@ -1,0 +1,9 @@
+jar {
+    from rootProject.sourceSets.main.output
+    manifest {
+        attributes(
+                'Class-Path': 'se.kth.coblox.gui',
+                'Main-Class': 'se.kth.coblox.gui.GUI',
+        )
+    }
+}
