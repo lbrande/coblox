@@ -5,7 +5,12 @@ public class Game {
   private int score;
 
   public Game() {
+    board = new Board();
     score = 0;
+  }
+
+  public void performTick() {
+
   }
 
   public Board getBoard() {
