@@ -1,4 +1,11 @@
 package se.kth.coblox;
 
-public class Color {
+public enum Color {
+  BLACK,
+  BLUE,
+  GREEN,
+  ORANGE,
+  PURPLE,
+  RED,
+  WHITE
 }
