@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.BorderPane?>
+<?import se.kth.coblox.gui.GameCanvas?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
             fx:controller="se.kth.coblox.gui.GUIController">
 
+    <center>
+        <GameCanvas fx:id="canvas" width="600" height="400"/>
+    </center>
 </BorderPane>
