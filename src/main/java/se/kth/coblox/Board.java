@@ -15,7 +15,7 @@ public class Board {
     random = new Random();
   }
 
-  public void generateNewPiece(int numberOfBlocks) {
+  private void generateNewPiece(int numberOfBlocks) {
     if (numberOfBlocks >= 1) {
       for (int i = 1; i <= numberOfBlocks; i++) {
         fallingPiece.add(new Block((int) Math.ceil(rows() / 2), columns() - i, randomColor()));

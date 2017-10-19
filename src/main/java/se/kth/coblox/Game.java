@@ -10,7 +10,8 @@ public class Game {
   }
 
   public void performTick() {
-
+    board.fallPiece();
+    board.removeCompleteRows();
   }
 
   public Board getBoard() {
