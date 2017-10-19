@@ -1,6 +1,9 @@
 package se.kth.coblox;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 public class Board {
   private Color[][] groundedBlocks;
@@ -106,9 +109,7 @@ public class Board {
   }
 
   public void fallPiece() {
-    Iterator<Block> piece = fallingPiece.iterator();
-    while (piece.hasNext()) {
-      Block block = piece.next();
+    for (Block block : fallingPiece) {
       if (groundedBlocks[block.getY() - 1][block.getX()] != null) {
         block.setY(block.getY() - 1);
       } else {

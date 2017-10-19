@@ -11,7 +11,7 @@ public class Game {
 
   public void performTick() {
     board.fallPiece();
-    board.removeCompleteRows();
+    /*score += board.removeCompleteRows();*/
   }
 
   public Board getBoard() {
