@@ -143,7 +143,7 @@ public class Board {
         if (direction == Direction.LEFT) {
           block.setX(block.getX() - 1);
         } else if (direction == Direction.RIGHT) {
-          block.setX(block.getX() - 1);
+          block.setX(block.getX() + 1);
         }
       }
     }
@@ -152,15 +152,36 @@ public class Board {
   }
 
   public boolean rotatePiece(Direction direction) {
-    /*if (fallingPiece.size() > 1) {
+    if (fallingPiece.size() > 1) {
       int[] relativePieceCoordinate = {
         fallingPiece.get(1).getY() - rotatorPiece.getY(),
         fallingPiece.get(1).getX() - rotatorPiece.getX()
       };
-      if (direction == Direction.LEFT) {
-        if (relativePieceCoordinate[0] == 1 && relativePieceCoordinate[1] == 0) {}
+
+      for (Block block : fallingPiece) {
+        if (block == rotatorPiece) {
+          continue;
+        }
+
+        if (direction == Direction.RIGHT) {
+          if (relativePieceCoordinate[0] == 1 && relativePieceCoordinate[1] == 0) {
+            if (groundedBlocks[block.getY()-1][block.getX()+1] != null) {
+            block.setX(fallingPiece.get(1).getX() + 1);
+            block.setY(fallingPiece.get(1).getY() - 1);
+          } else if (relativePieceCoordinate[0] == 0 && relativePieceCoordinate[1] == 1) {
+            block.setX(fallingPiece.get(1).getX() - 1);
+            block.setY(fallingPiece.get(1).getY() - 1);
+          } else if (relativePieceCoordinate[0] == -1 && relativePieceCoordinate[1] == 0) {
+            block.setX(fallingPiece.get(1).getX() - 1);
+            block.setY(fallingPiece.get(1).getY() + 1);
+          } else if (relativePieceCoordinate[0] == 0 && relativePieceCoordinate[1] == -1) {
+            block.setX(fallingPiece.get(1).getX() + 1);
+            block.setY(fallingPiece.get(1).getY() + 1);
+          }
+          return true;
+        }
       }
-    }*/
+    }
     return false;
   }
 
