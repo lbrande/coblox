@@ -46,8 +46,8 @@ public class Board {
         }
         Arrays.fill(groundedBlocks[row], null);
         dropDownRows(row);
+        row--;
       }
-      row--;
     }
     return score;
   }
