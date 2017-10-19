@@ -152,6 +152,8 @@ public class Board {
   }
 
   public boolean rotatePiece(Direction direction) {
+    List<Block> oldFallingPiece = fallingPiece;
+    boolean isRotating = true;
     if (fallingPiece.size() > 1) {
       int[] relativePieceCoordinate = {
         fallingPiece.get(1).getY() - rotatorPiece.getY(),
@@ -163,26 +165,49 @@ public class Board {
           continue;
         }
 
+        int index = fallingPiece.indexOf(block);
+        int coordToRotateX = 0;
+        int coordToRotateY = 0;
+
         if (direction == Direction.RIGHT) {
-          if (relativePieceCoordinate[0] == 1 && relativePieceCoordinate[1] == 0) {
-            if (groundedBlocks[block.getY()-1][block.getX()+1] != null) {
-            block.setX(fallingPiece.get(1).getX() + 1);
-            block.setY(fallingPiece.get(1).getY() - 1);
-          } else if (relativePieceCoordinate[0] == 0 && relativePieceCoordinate[1] == 1) {
-            block.setX(fallingPiece.get(1).getX() - 1);
-            block.setY(fallingPiece.get(1).getY() - 1);
-          } else if (relativePieceCoordinate[0] == -1 && relativePieceCoordinate[1] == 0) {
-            block.setX(fallingPiece.get(1).getX() - 1);
-            block.setY(fallingPiece.get(1).getY() + 1);
-          } else if (relativePieceCoordinate[0] == 0 && relativePieceCoordinate[1] == -1) {
-            block.setX(fallingPiece.get(1).getX() + 1);
-            block.setY(fallingPiece.get(1).getY() + 1);
+          coordToRotateY = (int) Math.sin(Math.asin(relativePieceCoordinate[0]) - Math.PI / 2);
+          if (coordToRotateY == -1) {
+            coordToRotateX = (int) -Math.cos(Math.acos(relativePieceCoordinate[1]) - Math.PI / 2);
+          } else {
+            coordToRotateX = (int) Math.cos(Math.acos(relativePieceCoordinate[1]) - Math.PI / 2);
           }
-          return true;
+          if (groundedBlocks[block.getY() + coordToRotateY][block.getX() + coordToRotateX] != null
+              || block.getX() == columns() - 1 && coordToRotateX == 1
+              || block.getX() == 0 && coordToRotateX == -1) {
+            isRotating = false;
+          }
+        } else if (direction == Direction.LEFT) {
+          coordToRotateY = (int) Math.sin(Math.asin(relativePieceCoordinate[0]) + Math.PI / 2);
+          if (coordToRotateY == -1) {
+            coordToRotateX = (int) -Math.cos(Math.acos(relativePieceCoordinate[1]) + Math.PI / 2);
+          } else {
+            coordToRotateX = (int) Math.cos(Math.acos(relativePieceCoordinate[1]) + Math.PI / 2);
+          }
+
+          if (groundedBlocks[block.getY() + coordToRotateY][block.getX() + coordToRotateX] != null
+              || block.getX() == 0 && coordToRotateX == -1
+              || block.getX() == columns() - 1 && coordToRotateX == 1) {
+            isRotating = false;
+          }
+        }
+
+        if (isRotating) {
+          fallingPiece.get(index).setX(coordToRotateX * index);
+          fallingPiece.get(index).setY(coordToRotateY * index);
+        } else {
+          fallingPiece = oldFallingPiece;
+          break;
         }
       }
+    } else {
+      isRotating = false;
     }
-    return false;
+    return isRotating;
   }
 
   public int rows() {
