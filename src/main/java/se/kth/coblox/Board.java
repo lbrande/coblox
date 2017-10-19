@@ -178,7 +178,8 @@ public class Board {
           }
           if (groundedBlocks[block.getY() + coordToRotateY][block.getX() + coordToRotateX] != null
               || block.getX() == columns() - 1 && coordToRotateX == 1
-              || block.getX() == 0 && coordToRotateX == -1) {
+              || block.getX() == 0 && coordToRotateX == -1
+              || block.getY() == 0 && coordToRotateY == -1) {
             isRotating = false;
           }
         } else if (direction == Direction.LEFT) {
@@ -191,14 +192,15 @@ public class Board {
 
           if (groundedBlocks[block.getY() + coordToRotateY][block.getX() + coordToRotateX] != null
               || block.getX() == 0 && coordToRotateX == -1
-              || block.getX() == columns() - 1 && coordToRotateX == 1) {
+              || block.getX() == columns() - 1 && coordToRotateX == 1
+              || block.getY() == 0 && coordToRotateY == -1) {
             isRotating = false;
           }
         }
 
         if (isRotating) {
-          fallingPiece.get(index).setX(coordToRotateX * index);
-          fallingPiece.get(index).setY(coordToRotateY * index);
+          fallingPiece.get(index).setX(block.getX() + coordToRotateX * index);
+          fallingPiece.get(index).setY(block.getY() + coordToRotateY * index);
         } else {
           fallingPiece = oldFallingPiece;
           break;
