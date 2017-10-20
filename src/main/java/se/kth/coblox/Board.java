@@ -252,7 +252,8 @@ public class Board {
   }
 
   public Color getBlockColor(int x, int y) {
-    return fallingPiece
+    List<Block> fallingPieceCopy = new ArrayList<>(fallingPiece);
+    return fallingPieceCopy
         .stream()
         .filter((block) -> block.getX() == x && block.getY() == y)
         .map(Block::getColor)

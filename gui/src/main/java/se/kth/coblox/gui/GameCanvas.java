@@ -35,12 +35,15 @@ public class GameCanvas extends Canvas {
     graphicsContext.setFill(BACKGROUND_COLOR);
     graphicsContext.fillRect(0, 0, getWidth(), getHeight());
     double squareSize = getHeight() / game.getBoard().rows();
-    /*for (int row = 0; row < game.getBoard().rows(); game.getBoard().rows()) {
-      for (int column = 0; column < game.getBoard().columns(); game.getBoard().columns()) {
-        graphicsContext.setFill(blockColors.get(game.getBoard().getBlockColor(column, row)));
-        graphicsContext.fillRect(
-            column * squareSize, getHeight() - (row + 1) * squareSize, squareSize, squareSize);
+    for (int row = 0; row < game.getBoard().rows(); row++) {
+      for (int column = 0; column < game.getBoard().columns(); column++) {
+        se.kth.coblox.Color blockColor = game.getBoard().getBlockColor(column, row);
+        if (blockColor != null) {
+          graphicsContext.setFill(blockColors.get(blockColor));
+          graphicsContext.fillRect(
+              column * squareSize, getHeight() - (row + 1) * squareSize, squareSize, squareSize);
+        }
       }
-    }*/
+    }
   }
 }
