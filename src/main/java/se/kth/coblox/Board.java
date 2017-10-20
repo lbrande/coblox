@@ -18,7 +18,7 @@ public class Board {
     random = new Random();
   }
 
-  private void generateNewPiece(int numberOfBlocks) {
+  public void generateNewPiece(int numberOfBlocks) {
     if (numberOfBlocks >= 1) {
       for (int i = 1; i <= numberOfBlocks; i++) {
         fallingPiece.add(new Block((int) Math.ceil(rows() / 2), columns() - i, randomColor()));
@@ -152,7 +152,7 @@ public class Board {
     return isMovable;
   }
 
-  public boolean rotatePiece(Direction direction) {
+  public boolean rotatePiece(Direction directionOfRotation) {
     List<Block> oldFallingPiece = fallingPiece;
     boolean isRotating = true;
     if (fallingPiece.size() > 1) {
@@ -167,41 +167,44 @@ public class Board {
         }
 
         int index = fallingPiece.indexOf(block);
-        int coordToRotateX = 0;
-        int coordToRotateY = 0;
 
-        if (direction == Direction.RIGHT) {
-          coordToRotateY = (int) Math.sin(Math.asin(relativePieceCoordinate[0]) - Math.PI / 2);
-          if (coordToRotateY == -1) {
-            coordToRotateX = (int) -Math.cos(Math.acos(relativePieceCoordinate[1]) - Math.PI / 2);
-          } else {
-            coordToRotateX = (int) Math.cos(Math.acos(relativePieceCoordinate[1]) - Math.PI / 2);
-          }
-          if (groundedBlocks[block.getY() + coordToRotateY][block.getX() + coordToRotateX] != null
-              || block.getX() == columns() - 1 && coordToRotateX == 1
-              || block.getX() == 0 && coordToRotateX == -1
-              || block.getY() == 0 && coordToRotateY == -1) {
-            isRotating = false;
-          }
-        } else if (direction == Direction.LEFT) {
-          coordToRotateY = (int) Math.sin(Math.asin(relativePieceCoordinate[0]) + Math.PI / 2);
-          if (coordToRotateY == -1) {
-            coordToRotateX = (int) -Math.cos(Math.acos(relativePieceCoordinate[1]) + Math.PI / 2);
-          } else {
-            coordToRotateX = (int) Math.cos(Math.acos(relativePieceCoordinate[1]) + Math.PI / 2);
-          }
+        int newRelativeX = 0;
+        int newRelativeY = 0;
 
-          if (groundedBlocks[block.getY() + coordToRotateY][block.getX() + coordToRotateX] != null
-              || block.getX() == 0 && coordToRotateX == -1
-              || block.getX() == columns() - 1 && coordToRotateX == 1
-              || block.getY() == 0 && coordToRotateY == -1) {
-            isRotating = false;
-          }
+        if (directionOfRotation == Direction.RIGHT) {
+          int sinOfNewCoordinate =
+              (int) Math.sin(Math.asin(relativePieceCoordinate[0]) - Math.PI / 2);
+          newRelativeY =
+              relativePieceCoordinate[1] == -1 ? -sinOfNewCoordinate : sinOfNewCoordinate;
+
+          int cosOfNewCoordinate =
+              (int) Math.cos(Math.acos(relativePieceCoordinate[1]) - Math.PI / 2);
+          newRelativeX =
+              relativePieceCoordinate[1] == -1 ? -cosOfNewCoordinate : cosOfNewCoordinate;
+
+        } else if (directionOfRotation == Direction.LEFT) {
+          int sinOfNewCoordinate =
+              (int) Math.sin(Math.asin(relativePieceCoordinate[0]) + Math.PI / 2);
+          newRelativeY =
+              relativePieceCoordinate[1] == -1 ? -sinOfNewCoordinate : sinOfNewCoordinate;
+
+          int cosOfNewCoordinate =
+              (int) Math.cos(Math.acos(relativePieceCoordinate[1]) + Math.PI / 2);
+          newRelativeX =
+              relativePieceCoordinate[1] == -1 ? -cosOfNewCoordinate : cosOfNewCoordinate;
+        }
+
+        if (groundedBlocks[block.getY() + newRelativeY][block.getX() + newRelativeX] != null
+            || block.getX() == columns() - 1 && newRelativeX == 1
+            || block.getY() == rows() - 1 && newRelativeY == 1
+            || block.getX() == 0 && newRelativeX == -1
+            || block.getY() == 0 && newRelativeY == -1) {
+          isRotating = false;
         }
 
         if (isRotating) {
-          fallingPiece.get(index).setX(block.getX() + coordToRotateX * index);
-          fallingPiece.get(index).setY(block.getY() + coordToRotateY * index);
+          block.setX(block.getX() + newRelativeX * index);
+          block.setY(block.getY() + newRelativeY * index);
         } else {
           fallingPiece = oldFallingPiece;
           break;
