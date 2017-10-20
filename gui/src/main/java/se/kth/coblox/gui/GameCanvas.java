@@ -27,7 +27,7 @@ public class GameCanvas extends Canvas {
     blockColors.put(se.kth.coblox.Color.ORANGE, Color.ORANGE);
     blockColors.put(se.kth.coblox.Color.PURPLE, Color.PURPLE);
     blockColors.put(se.kth.coblox.Color.RED, Color.DARKRED);
-    blockColors.put(se.kth.coblox.Color.WHITE, Color.LIGHTYELLOW);
+    blockColors.put(se.kth.coblox.Color.WHITE, Color.WHITE);
   }
 
   public void draw(Game game) {
