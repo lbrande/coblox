@@ -14,6 +14,7 @@ public class Board {
   public Board() {
     groundedBlocks = new Color[15][5];
     fallingPiece = new ArrayList<>();
+    generateNewPiece(2);
     rotatorPiece = null;
     random = new Random();
   }
