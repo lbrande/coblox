@@ -14,19 +14,31 @@ public class Board {
   public Board() {
     groundedBlocks = new Color[15][5];
     fallingPiece = new ArrayList<>();
-    generateNewPiece(2);
     rotatorPiece = null;
     random = new Random();
+
+    generateNewPiece(2);
   }
 
   public void generateNewPiece(int numberOfBlocks) {
-    if (numberOfBlocks >= 1) {
+    if (numberOfBlocks > 0 && numberOfBlocks < columns()) {
       for (int i = 1; i <= numberOfBlocks; i++) {
-        fallingPiece.add(new Block((int) Math.ceil(rows() / 2), columns() - i, randomColor()));
+        int x = (int) Math.ceil(columns() / 2);
+        int y = rows() - i;
+        if (groundedBlocks[y][x] == null) {
+          fallingPiece.add(new Block(x, y, randomColor()));
+        } else {
+          // return false;
+        }
         if (i == 1) {
           rotatorPiece = fallingPiece.get(0);
         }
       }
+      // return true;
+    } else {
+      /*throw new IndexOutOfBoundsException(
+      "0 < numberOfBlocks < columns");*/
+      // return true;
     }
   }
 
@@ -110,16 +122,33 @@ public class Board {
   }
 
   public void fallPiece() {
+    List<Block> collidingBlocks = new ArrayList<>();
     for (Block block : fallingPiece) {
-      if (groundedBlocks[block.getY() - 1][block.getX()] != null) {
-        block.setY(block.getY() - 1);
-      } else {
-        groundedBlocks[block.getY()][block.getX()] = block.getColor();
-        fallingPiece.remove(block);
-        if (fallingPiece.size() == 0) {
-          generateNewPiece(2);
+      if (block.getY() == 0 || groundedBlocks[block.getY() - 1][block.getX()] != null) {
+        collidingBlocks.add(block);
+      }
+    }
+
+    for (Block collidingBlock : collidingBlocks) {
+      for (Block fallingBlock : fallingPiece) {
+        if (fallingBlock.getX() == collidingBlock.getX()) {
+          groundedBlocks[fallingBlock.getY()][fallingBlock.getX()] = fallingBlock.getColor();
+          System.out.println("X: "+fallingBlock.getX()+" Y: "+fallingBlock.getY());
+          // PROBLEMET HÄR ÄR ATT NÄR MAN TAR BORT FALLINGPIECE I FÖRSTA ITTERATIONEN SÅ SLUTAR INRE
+          // LOOPEN FUNGERA!
+          fallingPiece.remove(fallingBlock);
+
         }
       }
+    }
+
+    if (fallingPiece.size() > 0) {
+      for (Block block : fallingPiece) {
+        block.setY(block.getY() - 1);
+      }
+    } else {
+      generateNewPiece(2);
+      System.out.println("New piece generated");
     }
   }
 

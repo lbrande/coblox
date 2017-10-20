@@ -1,11 +1,12 @@
 package se.kth.coblox.gui;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import se.kth.coblox.Game;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameScene extends Scene {
   private GameCanvas canvas;
@@ -30,6 +31,6 @@ public class GameScene extends Scene {
           }
         },
         0,
-        1000);
+        250);
   }
 }
