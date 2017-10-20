@@ -1,11 +1,15 @@
 package se.kth.coblox;
 
+import java.awt.image.ByteLookupTable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 public class Board {
+  private static int SCORE_FOR_DIFFERENT = 10;
+  private static int SCORE_FOR_SIMILAR = 15;
+
   private Color[][] groundedBlocks;
   private List<Block> fallingPiece;
   private Block rotatorPiece;
@@ -20,7 +24,7 @@ public class Board {
     generateNewPiece(2);
   }
 
-  public void generateNewPiece(int numberOfBlocks) {
+  public boolean generateNewPiece(int numberOfBlocks) {
     if (numberOfBlocks > 0 && numberOfBlocks < columns()) {
       for (int i = 1; i <= numberOfBlocks; i++) {
         int x = (int) Math.ceil(columns() / 2);
@@ -28,17 +32,15 @@ public class Board {
         if (groundedBlocks[y][x] == null) {
           fallingPiece.add(new Block(x, y, randomColor()));
         } else {
-          // return false;
+          return false;
         }
         if (i == 1) {
           rotatorPiece = fallingPiece.get(0);
         }
       }
-      // return true;
+      return true;
     } else {
-      /*throw new IndexOutOfBoundsException(
-      "0 < numberOfBlocks < columns");*/
-      // return true;
+      throw new IndexOutOfBoundsException("0 < numberOfBlocks < columns");
     }
   }
 
@@ -77,18 +79,18 @@ public class Board {
     int score = 0;
     for (int column = 0; column < columns(); column++) {
       if (groundedBlocks[row][column] == null || groundedBlocks[row][column].equals(Color.BLACK)) {
-        return -1;
+        return 0;
       } else if (groundedBlocks[row][column].equals(Color.WHITE)) {
-        score += 5;
+        score += SCORE_FOR_DIFFERENT / 2;
         continue;
       }
 
       for (int i = 0; i < column; i++) {
         if (groundedBlocks[row][i].equals(groundedBlocks[row][column])) {
-          return -1;
+          return 0;
         }
       }
-      score += 10;
+      score += SCORE_FOR_DIFFERENT;
     }
     return score;
   }
@@ -98,30 +100,29 @@ public class Board {
     Color firstColoredBlock = null;
     for (int column = 0; column < columns(); column++) {
       if (groundedBlocks[row][column] == null) {
-        return -1;
+        return 0;
       } else if (groundedBlocks[row][column].equals(Color.WHITE)) {
-        score += 5;
+        score += SCORE_FOR_SIMILAR / 3;
         continue;
       } else if (groundedBlocks[row][column].equals(Color.BLACK)) {
-        score += 25;
+        score += SCORE_FOR_SIMILAR * 2;
         continue;
       } else if (firstColoredBlock == null) {
         firstColoredBlock = groundedBlocks[row][column];
-        score += 15;
+        score += SCORE_FOR_SIMILAR;
         continue;
       }
 
       if (groundedBlocks[row][column].equals(firstColoredBlock)) {
-        score += 15;
+        score += SCORE_FOR_SIMILAR;
       } else {
-        score = 0;
-        break;
+        return 0;
       }
     }
     return score;
   }
 
-  public void fallPiece() {
+  public boolean fallPiece() {
     List<Block> collidingBlocks = new ArrayList<>();
     for (Block block : fallingPiece) {
       if (block.getY() == 0 || groundedBlocks[block.getY() - 1][block.getX()] != null) {
@@ -130,14 +131,11 @@ public class Board {
     }
 
     for (Block collidingBlock : collidingBlocks) {
-      for (Block fallingBlock : fallingPiece) {
+      List<Block> fallingPieceCopy = new ArrayList<>(fallingPiece);
+      for (Block fallingBlock : fallingPieceCopy) {
         if (fallingBlock.getX() == collidingBlock.getX()) {
           groundedBlocks[fallingBlock.getY()][fallingBlock.getX()] = fallingBlock.getColor();
-          System.out.println("X: "+fallingBlock.getX()+" Y: "+fallingBlock.getY());
-          // PROBLEMET HÄR ÄR ATT NÄR MAN TAR BORT FALLINGPIECE I FÖRSTA ITTERATIONEN SÅ SLUTAR INRE
-          // LOOPEN FUNGERA!
           fallingPiece.remove(fallingBlock);
-
         }
       }
     }
@@ -146,9 +144,9 @@ public class Board {
       for (Block block : fallingPiece) {
         block.setY(block.getY() - 1);
       }
+      return true;
     } else {
-      generateNewPiece(2);
-      System.out.println("New piece generated");
+      return generateNewPiece(2);
     }
   }
 

@@ -9,9 +9,9 @@ public class Game {
     score = 0;
   }
 
-  public void performTick() {
-    board.fallPiece();
+  public boolean performTick() {
     score += board.removeCompleteRows();
+    return board.fallPiece();
   }
 
   public Board getBoard() {

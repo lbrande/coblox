@@ -26,7 +26,9 @@ public class GameScene extends Scene {
           @Override
           public void run() {
             System.out.println("hello");
-            game.performTick();
+            if (!game.performTick()) {
+              timer.cancel();
+            }
             Platform.runLater(() -> canvas.draw(game));
           }
         },
