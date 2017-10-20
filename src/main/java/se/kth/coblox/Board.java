@@ -251,4 +251,8 @@ public class Board {
   public int columns() {
     return groundedBlocks[0].length;
   }
+
+  public Color getBlockColor(int x, int y) {
+      return groundedBlocks[y][x];
+  }
 }
