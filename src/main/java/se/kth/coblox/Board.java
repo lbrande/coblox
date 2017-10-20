@@ -1,6 +1,5 @@
 package se.kth.coblox;
 
-import java.awt.image.ByteLookupTable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -253,6 +252,11 @@ public class Board {
   }
 
   public Color getBlockColor(int x, int y) {
-      return groundedBlocks[y][x];
+    return fallingPiece
+        .stream()
+        .filter((block) -> block.getX() == x && block.getY() == y)
+        .map(Block::getColor)
+        .findAny()
+        .orElse(groundedBlocks[y][x]);
   }
 }
