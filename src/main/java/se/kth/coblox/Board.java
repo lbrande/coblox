@@ -221,11 +221,11 @@ public class Board {
               relativePieceCoordinate[0] == -1 ? -cosOfNewCoordinate : cosOfNewCoordinate;
         }
 
-        if (groundedBlocks[rotatorPiece.getY() + newRelativeY][rotatorPiece.getX() + newRelativeX] != null
-            || block.getX() == columns() - 1 && newRelativeX == 1
+        if (block.getX() == columns() - 1 && newRelativeX == 1
             || block.getY() == rows() - 1 && newRelativeY == 1
             || block.getX() == 0 && newRelativeX == -1
-            || block.getY() == 0 && newRelativeY == -1) {
+            || block.getY() == 0 && newRelativeY == -1
+            || groundedBlocks[rotatorPiece.getY() + newRelativeY][rotatorPiece.getX() + newRelativeX] != null) {
           isRotatable = false;
         }
 
