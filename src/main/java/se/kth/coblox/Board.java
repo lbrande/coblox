@@ -68,7 +68,7 @@ public class Board {
 
   private void dropDownRows(int deletedRow) {
     for (int column = 0; column < columns(); column++) {
-      for (int row = deletedRow; deletedRow < rows() - 1; deletedRow++) {
+      for (int row = deletedRow; row < rows() - 1; row++) {
         groundedBlocks[row][column] = groundedBlocks[row + 1][column];
       }
     }
@@ -181,7 +181,7 @@ public class Board {
 
   public boolean rotatePiece(Direction directionOfRotation) {
     List<Block> oldFallingPiece = fallingPiece;
-    boolean isRotating = true;
+    boolean isRotatable = true;
     if (fallingPiece.size() > 1) {
       int[] relativePieceCoordinate = {
         fallingPiece.get(1).getY() - rotatorPiece.getY(),
@@ -207,7 +207,7 @@ public class Board {
           int cosOfNewCoordinate =
               (int) Math.cos(Math.acos(relativePieceCoordinate[1]) - Math.PI / 2);
           newRelativeX =
-              relativePieceCoordinate[1] == -1 ? -cosOfNewCoordinate : cosOfNewCoordinate;
+              relativePieceCoordinate[0] == -1 ? -cosOfNewCoordinate : cosOfNewCoordinate;
 
         } else if (directionOfRotation == Direction.LEFT) {
           int sinOfNewCoordinate =
@@ -218,29 +218,29 @@ public class Board {
           int cosOfNewCoordinate =
               (int) Math.cos(Math.acos(relativePieceCoordinate[1]) + Math.PI / 2);
           newRelativeX =
-              relativePieceCoordinate[1] == -1 ? -cosOfNewCoordinate : cosOfNewCoordinate;
+              relativePieceCoordinate[0] == -1 ? -cosOfNewCoordinate : cosOfNewCoordinate;
         }
 
-        if (groundedBlocks[block.getY() + newRelativeY][block.getX() + newRelativeX] != null
+        if (groundedBlocks[rotatorPiece.getY() + newRelativeY][rotatorPiece.getX() + newRelativeX] != null
             || block.getX() == columns() - 1 && newRelativeX == 1
             || block.getY() == rows() - 1 && newRelativeY == 1
             || block.getX() == 0 && newRelativeX == -1
             || block.getY() == 0 && newRelativeY == -1) {
-          isRotating = false;
+          isRotatable = false;
         }
 
-        if (isRotating) {
-          block.setX(block.getX() + newRelativeX * index);
-          block.setY(block.getY() + newRelativeY * index);
+        if (isRotatable) {
+          block.setX(rotatorPiece.getX() + newRelativeX * index);
+          block.setY(rotatorPiece.getY() + newRelativeY * index);
         } else {
           fallingPiece = oldFallingPiece;
           break;
         }
       }
     } else {
-      isRotating = false;
+      isRotatable = false;
     }
-    return isRotating;
+    return isRotatable;
   }
 
   public int rows() {
