@@ -7,6 +7,6 @@
             fx:controller="se.kth.coblox.gui.GUIController">
 
     <center>
-        <GameCanvas fx:id="canvas" width="600" height="400"/>
+        <GameCanvas fx:id="canvas" width="600" height="400" onKeyPressed="#keyPressed"/>
     </center>
 </BorderPane>
